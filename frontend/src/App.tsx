@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import LandingPage from "./LandingPage";
 import ChatBot from "./ChatBot";
 
-const API_URL = "http://127.0.0.1:8004";
+const API_URL = "http://127.0.0.1:8003";
 
 export default function App() {
   const [viewIndex, setViewIndex] = useState(0);
