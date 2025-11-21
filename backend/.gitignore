@@ -1,0 +1,26 @@
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment (Crucial to ignore)
+venv/
+env/
+.venv/
+
+# Environment Variables (NEVER commit API keys)
+.env
+.env.*
+
+# The temporary folder where we clone repos
+# We do NOT want to commit other people's code to our repo
+temp_repos/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db

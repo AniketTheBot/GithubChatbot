@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+GitPython
+langchain
+langchain-community
+langchain-text-splitters
+langchain-openai
+supabase
+tiktoken
