@@ -1,36 +1,73 @@
 Talk to Your Codebase 🤖💬
-A cinematic, full-stack RAG (Retrieval-Augmented Generation) application that allows you to chat with any GitHub repository. It features a "Firefly" landing page, a glassmorphic chat interface, and deep context awareness with source citations.
-![alt text](https://img.shields.io/badge/Built%20With-FastAPI%20%2B%20React-000000?style=for-the-badge)
+
+A cinematic, full-stack RAG (Retrieval-Augmented Generation) application that allows you to chat with any GitHub repository.
+It features a Firefly landing page, glassmorphic chat interface, and deep context awareness with source citations.
+
 ✨ Features
-Cinematic Landing Page: Interactive "Firefly" mouse tracking and typewriter effects.
-Smart Ingestion: Clones, parses, and chunks code files (Python, JS, TS, Rust, Go, etc.).
-RAG Pipeline: Uses OpenAI Embeddings and Supabase (pgvector) to find relevant code.
-Context-Aware Chat: Remembers previous messages ("Rewrite it in Rust").
-Citations: Shows exactly which files were used to generate the answer.
-Syntax Highlighting: Dracula-themed code blocks for better readability.
-Session Management: "New Repo" button clears the database and state instantly.
+
+🎆 Cinematic Landing Page — Firefly motion, parallax, typewriter.
+
+📥 Smart Ingestion — Clones + parses + chunks code (Python, JS, TS, Rust, Go…)
+
+🧠 RAG Pipeline — OpenAI Embeddings + Supabase pgvector.
+
+💬 Context-Aware Chat — Maintains conversation memory.
+
+📌 Citations — Shows which files were used.
+
+🧩 Syntax Highlighting — Dracula-themed code blocks.
+
+🔄 Session Management — “New Repo” clears DB + state instantly.
+
 🛠 Tech Stack
-Frontend: React (Vite), Tailwind CSS, Framer Motion, Lucide React.
-Backend: Python (FastAPI), LangChain, GitPython.
-Database: Supabase (PostgreSQL + pgvector).
-AI: OpenAI (GPT-4o-mini / Text-Embedding-3-Small).
+Frontend
+
+React (Vite)
+
+Tailwind CSS
+
+Framer Motion
+
+Lucide Icons
+
+Backend
+
+FastAPI
+
+LangChain
+
+GitPython
+
+Database
+
+Supabase (PostgreSQL + pgvector)
+
+AI
+
+OpenAI GPT-4o-mini
+
+Text-Embedding-3-Small
+
 🚀 Getting Started
-Prerequisites
-Node.js & npm installed.
-Python 3.10+ installed.
-Supabase Account (Free tier).
-OpenAI API Key.
+✅ Prerequisites
+
+Node.js & npm
+
+Python 3.10+
+
+Supabase Account
+
+OpenAI API Key
+
 1. Database Setup (Supabase)
-Before running the code, you must set up the vector database.
-Go to your Supabase Dashboard.
-Navigate to the SQL Editor.
-Paste and Run the following SQL script to enable vectors and create the function:
-code
-SQL
--- 1. Enable the pgvector extension to work with embeddings
+
+Go to Supabase Dashboard → SQL Editor
+Paste and run:
+
+-- Enable pgvector
 create extension if not exists vector;
 
--- 2. Create a table to store your documents
+-- Documents table
 create table documents (
   id uuid primary key default gen_random_uuid(),
   content text,
@@ -38,7 +75,7 @@ create table documents (
   embedding vector(1536)
 );
 
--- 3. Create the search function
+-- Search function
 create function match_documents (
   query_embedding vector(1536),
   match_threshold float,
@@ -65,14 +102,11 @@ begin
   limit match_count;
 end;
 $$;
+
 2. Backend Setup
-Navigate to the backend folder:
-code
-Bash
 cd backend
-Create a Virtual Environment:
-code
-Bash
+
+Create virtual environment
 # Windows
 python -m venv venv
 .\venv\Scripts\activate
@@ -80,80 +114,108 @@ python -m venv venv
 # Mac/Linux
 python3 -m venv venv
 source venv/bin/activate
-Install Dependencies:
-code
-Bash
+
+Install dependencies
 pip install -r requirements.txt
-Configure Environment Variables:
-Create a .env file in the backend/ folder:
-code
-Env
+
+Environment variables
+
+Create backend/.env:
+
 OPENAI_API_KEY=sk-proj-...
 SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_KEY=ey... (Your 'anon' public key)
-Run the Server (Port 8003):
-code
-Bash
+SUPABASE_KEY=ey...
+
+Run FastAPI server
 uvicorn app.main:app --reload --port 8003
-The backend is now running at http://127.0.0.1:8003.
+
+
+Backend is live at:
+
+http://127.0.0.1:8003
+
 3. Frontend Setup
-Open a new terminal and navigate to the frontend folder:
-code
-Bash
 cd frontend
-Install Dependencies:
-code
-Bash
 npm install
-Configure API Port:
-Ensure src/App.tsx points to port 8003. Open the file and check this line:
-code
-TypeScript
+
+Ensure API URL is correct
+
+In src/App.tsx:
+
 const API_URL = "http://127.0.0.1:8003";
-Run the Frontend:
-code
-Bash
+
+Run Vite dev server
 npm run dev
-The frontend is now running at http://localhost:5173.
+
+
+Your frontend runs at:
+
+http://localhost:5173
+
 🎮 How to Use
-Open http://localhost:5173 in your browser.
-Ingest: Paste a GitHub repository URL (e.g., https://github.com/jwasham/practice-python) into the input bar and hit Enter.
-Wait: The system will clone the repo, chunk the code, and store vectors. The screen will slide down when ready.
-Chat: Ask questions like:
-"How does the authentication logic work?"
-"Show me the code for the binary search."
-"Rewrite the login function in TypeScript."
-Reset: Click the "New" button in the top right to wipe the database and start with a fresh repo.
+
+Open the app.
+
+Paste a GitHub URL (e.g., https://github.com/jwasham/practice-python)
+
+Click Ingest
+
+Wait while:
+
+Cloning
+
+Chunking
+
+Embedding
+
+Storing
+
+Start chatting:
+
+"How does the authentication work?"
+"Show me the binary search function."
+"Rewrite this in Rust."
+
+
+Click New to reset.
+
 📂 Project Structure
-code
-Code
 root/
 ├── backend/
 │   ├── app/
 │   │   ├── services/
-│   │   │   ├── github.py       # Clones repos
-│   │   │   ├── loader.py       # Reads files (Polyglot support)
-│   │   │   ├── chunker.py      # Splits code intelligently
-│   │   │   ├── vector_store.py # Talks to Supabase
-│   │   │   └── llm.py          # Talks to OpenAI
-│   │   └── main.py             # FastAPI Endpoints
-│   ├── temp_repos/             # Git clone storage (GitIgnored)
+│   │   │   ├── github.py        # Clone repos
+│   │   │   ├── loader.py        # Read + detect file types
+│   │   │   ├── chunker.py       # Split intelligently
+│   │   │   ├── vector_store.py  # Supabase + pgvector
+│   │   │   └── llm.py           # OpenAI calls
+│   │   └── main.py              # FastAPI endpoints
+│   ├── temp_repos/
 │   ├── .env
 │   └── requirements.txt
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── App.tsx             # Main Orchestrator
-│   │   ├── LandingPage.tsx     # Firefly UI
-│   │   ├── ChatBot.tsx         # Chat Interface
-│   │   └── ...
+│   │   ├── App.tsx
+│   │   ├── LandingPage.tsx
+│   │   ├── ChatBot.tsx
 │   ├── public/
-│   │   └── bg.jpg              # Background Asset
 │   ├── tailwind.config.js
 │   └── package.json
+
 ⚠️ Troubleshooting
-"Invalid URL" Error: Ensure you include https://github.com/ in your input.
-"500 Internal Server Error": Check your .env file in the backend. Are the API keys correct?
-CORS Errors: Ensure the Backend is running specifically on port 8003, as configured in the Frontend API_URL.
+❌ "Invalid URL"
+
+Use https://github.com/...
+
+❌ 500 Internal Server Error
+
+Check backend .env
+
+❌ CORS Errors
+
+Backend must run on port 8003.
+
 📜 License
-This project is open-source. Feel free to modify and distribute.
+
+Open-source. Modify & distribute freely.
