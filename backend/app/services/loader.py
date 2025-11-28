@@ -1,16 +1,23 @@
 import os
 
 def load_files_from_repo(repo_path: str):
-    """
-    Walks through the repo directory and reads all code files.
-    Returns a list of dicts: [{"file_path": "...", "content": "..."}]
-    """
     documents = []
     
-    ALLOWED_EXTENSIONS = {'.py', '.js', '.jsx', '.ts', '.tsx', '.md', '.html', '.css'}
+    # 1. Update Allowed Extensions
+    ALLOWED_EXTENSIONS = {
+        # Code
+        '.py', '.js', '.jsx', '.ts', '.tsx', 
+        '.rs', '.go', '.java', '.cpp', '.c', '.h', 
+        # Web
+        '.html', '.htm', '.css', 
+        # Scripts / Config
+        '.sh', '.bash', '.bat', '.cmd', '.yaml', '.yml', '.json', '.md'
+    }
+    
+    # Files specific names to include (extensions often empty)
+    ALLOWED_FILENAMES = {'Dockerfile', 'dockerfile', 'Makefile', 'makefile'}
 
     for root, _, files in os.walk(repo_path):
-        # Skip .git folder
         if ".git" in root:
             continue
 
@@ -18,14 +25,11 @@ def load_files_from_repo(repo_path: str):
             file_path = os.path.join(root, file)
             _, ext = os.path.splitext(file)
 
-            # Only read allowed file types
-            if ext in ALLOWED_EXTENSIONS:
+            # Check if valid extension OR valid filename (like Dockerfile)
+            if ext in ALLOWED_EXTENSIONS or file in ALLOWED_FILENAMES:
                 try:
                     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                         content = f.read()
-                        
-                        # Create a relative path for cleaner citations later
-                        # e.g., /users/me/temp_repos/react/src/index.js -> src/index.js
                         relative_path = os.path.relpath(file_path, repo_path)
 
                         documents.append({
