@@ -114,7 +114,7 @@ CHAT_MODEL=gpt-4o-mini
 
 Run backend (dev):
 ```powershell
-uvicorn app.main:app --reload --port 8003
+uvicorn app.main:app --port 8003
 ```
 Backend base: http://127.0.0.1:8003
 
